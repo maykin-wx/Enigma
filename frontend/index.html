@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Você na ETEC</title>
+</head>
+    <style>
+      /* Reset e básicos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: #0a0a0a;
+    min-height: 100vh; /* Garante que ocupa a altura total */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    line-height: 1.4;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* NOVO: Container que abraça os dois painéis e os coloca lado a lado */
+.page-container {
+    display: flex;
+    gap: 30px; /* Espaço entre as duas colunas */
+    width: 100%;
+    max-width: 950px; /* Largura total razoável para os dois */
+    position: relative;
+    z-index: 1;
+    align-items: flex-start; /* Alinha o conteúdo ao topo */
+}
+
+/* Cyber Grid Background */
+.cyber-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.grid-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, #00ff41, transparent);
+    opacity: 0.1;
+    animation: gridPulse 4s ease-in-out infinite;
+}
+
+.grid-h-1 { top: 20%; width: 100%; height: 1px; animation-delay: 0s; }
+.grid-h-2 { top: 50%; width: 100%; height: 1px; animation-delay: 1.5s; }
+.grid-h-3 { top: 80%; width: 100%; height: 1px; animation-delay: 3s; }
+
+.grid-v-1 { top: 0; left: 25%; width: 1px; height: 100%; background: linear-gradient(0deg, transparent, #00ff41, transparent); animation-delay: 0.75s; }
+.grid-v-2 { top: 0; left: 75%; width: 1px; height: 100%; background: linear-gradient(0deg, transparent, #00ff41, transparent); animation-delay: 2.25s; }
+
+@keyframes gridPulse {
+    0%,100%{opacity:0.1}50%{opacity:0.3}
+}
+
+.cyber-glitch {
+    position: absolute;
+    width: 200px;
+    height: 2px;
+    background: #ff0080;
+    opacity: 0;
+    animation: glitchFlash 6s ease-in-out infinite;
+}
+.glitch-1 { top: 30%; left: 10%; animation-delay: 2s; }
+.glitch-2 { top: 70%; right: 10%; animation-delay: 4s; }
+
+@keyframes glitchFlash {
+    0%,95%,100%{opacity:0;transform:scaleX(0);}
+    96%,99%{opacity:0.8;transform:scaleX(1);}
+}
+
+/* Containers da Coluna */
+.login-container, .ref-container {
+    width: 50%; /* Faz cada coluna ocupar metade do espaço */
+    max-width: 460px; /* Limite de largura para cada terminal */
+}
+
+.cyber-terminal {
+    background: rgba(0,0,0,0.9);
+    border: 2px solid #00ff41;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0,255,65,0.3), inset 0 0 0 1px rgba(0,255,65,0.1);
+    position: relative;
+    height: 100%; /* Garante que o terminal ocupe toda a altura disponível do seu container */
+}
+
+.terminal-header {
+    background: linear-gradient(90deg, #1a1a1a, #2a2a2a);
+    padding: 12px 16px;
+    border-bottom: 1px solid #00ff41;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.term-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.btn-red { background: #ff5555; box-shadow: 0 0 8px rgba(255,85,85,0.5); }
+.btn-yellow { background: #ffff55; box-shadow: 0 0 8px rgba(255,255,85,0.5); }
+.btn-green { background: #55ff55; box-shadow: 0 0 8px rgba(85,255,85,0.5); }
+
+.cyber-content {
+    padding: 40px 32px;
+}
+
+/* Neon Header */
+.neon-header { text-align: center; margin-bottom: 36px; }
+.cyber-logo {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.logo-frame {
+    position: relative;
+    z-index: 2;
+    color: #00ff41;
+    border: 2px solid #00ff41;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,255,65,0.05);
+    animation: logoScan 3s ease-in-out infinite;
+}
+@keyframes logoScan {
+    0%,100%{border-color:#00ff41;box-shadow:0 0 10px rgba(0,255,65,0.3);}
+    50%{border-color:#ff0080;box-shadow:0 0 15px rgba(255,0,128,0.5);}
+}
+.logo-scanner {
+    position: absolute; top:0; left:-100%; width:100%; height:100%;
+    background: linear-gradient(90deg, transparent, rgba(0,255,65,0.6), transparent);
+    animation: scanLine 2s linear infinite;
+}
+@keyframes scanLine { 0%{left:-100%}100%{left:100%} }
+
+.neon-glow {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    background: radial-gradient(circle, rgba(0,255,65,0.2) 0%, transparent 70%);
+    animation: neonPulse 2s ease-in-out infinite;
+}
+@keyframes neonPulse { 0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.2);opacity:0.8} }
+
+.cyber-title {
+    color: #00ff41;
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+}
+.title-glitch {
+    position: relative;
+    display: inline-block;
+    animation: textGlitch 4s ease-in-out infinite;
+}
+@keyframes textGlitch {
+    0%,90%,100%{transform:translate(0);filter:hue-rotate(0deg);}
+    91%,95%{transform:translate(-2px,1px);filter:hue-rotate(90deg);}
+    96%,99%{transform:translate(1px,-1px);filter:hue-rotate(180deg);}
+}
+
+/* Cyber Form */
+.cyber-field { position: relative; margin-bottom: 28px; }
+.field-frame {
+    position: relative;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(0,255,65,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.field-border {
+    position: absolute; top:0; left:0; right:0; bottom:0;
+    border:1px solid transparent; border-radius:4px;
+    background: linear-gradient(45deg,#00ff41,#ff0080) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity:0;
+    transition: opacity 0.3s ease;
+}
+.cyber-field input {
+    width:100%; background:transparent; border:none; padding:16px 60px 16px 16px;
+    color:#00ff41; font-size:14px; font-weight:bold; outline:none; position:relative; z-index:2;
+    font-family:inherit; text-transform:uppercase; letter-spacing:1px;
+}
+.cyber-field input::placeholder { color: #00ff4180; } /* Estilo para o placeholder */
+.cyber-field input:focus ~ .field-border { opacity:1; }
+.cyber-scanner { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+
+/* Neon Button */
+.neon-button {
+    width:100%; background:transparent; color:#00ff41; border:2px solid #00ff41;
+    border-radius:4px; padding:0; cursor:pointer; font-family:inherit; font-size:14px;
+    font-weight:bold; position:relative; margin-bottom:32px; overflow:hidden; min-height:50px;
+    display:flex; align-items:center; justify-content:center; text-transform:uppercase; letter-spacing:1px;
+    transition: all 0.3s ease;
+}
+.btn-matrix { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.9); transition: all 0.3s ease; }
+.neon-button:hover { border-color:#ff0080; color:#ff0080; box-shadow:0 0 15px rgba(255,0,128,0.5); }
+.neon-button:hover .btn-matrix { background:rgba(255,0,128,0.1); }
+.neon-button:active { transform: scale(0.98); }
+.btn-text { position:relative; z-index:2; transition:opacity 0.3s ease; }
+
+/* NOVO: Estilos da Tabela de Referência */
+.ref-table-wrapper {
+    max-height: 400px; /* Limita a altura da tabela */
+    overflow-y: auto; /* Adiciona barra de rolagem se necessário */
+    padding-right: 10px; /* Espaço para não encostar na barra de rolagem */
+}
+
+.cyber-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #00ff41;
+    font-size: 14px;
+    text-align: center;
+}
+
+.cyber-table th, .cyber-table td {
+    padding: 8px 4px;
+    border: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.cyber-table th {
+    background-color: rgba(0, 255, 65, 0.1);
+    color: #ff0080;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.cyber-table td {
+    font-weight: normal;
+}
+
+.cyber-table tbody tr:hover {
+    background-color: rgba(0, 255, 65, 0.05);
+    color: #ffff55;
+    cursor: help;
+}
+
+/* Mobile Responsive */
+@media (max-width:900px){
+    .page-container {
+        flex-direction: column; /* Empilha as colunas verticalmente em telas menores */
+        gap: 20px;
+    }
+    .login-container, .ref-container {
+        width: 100%;
+        max-width: 100%; /* Ocupa a largura total da tela */
+    }
+}
+
+@media (max-width:480px){
+    body{padding:16px;}
+    .cyber-terminal{border-radius:4px;}
+    .cyber-content{padding:32px 24px;}
+    .cyber-title{font-size:1.5rem;}
+    .cyber-logo{width:60px;height:60px;}
+    .logo-frame{width:50px;height:50px;}
+}
+/* Efeito de Erro para o Campo (Adicione ao final do seu CSS) */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.cyber-field input.error-shake {
+    animation: shake 0.5s;
+    color: #ff5555; /* Cor vermelha para indicar erro */
+}
+    </style>
+<body>
+    <div class="cyber-grid">
+        <div class="grid-line grid-h-1"></div>
+        <div class="grid-line grid-v-1"></div>
+        <div class="grid-line grid-h-2"></div>
+        <div class="grid-line grid-v-2"></div>
+        <div class="grid-line grid-h-3"></div>
+        <div class="cyber-glitch glitch-1"></div>
+        <div class="cyber-glitch glitch-2"></div>
+    </div>
+
+    <div class="page-container">
+
+        <div class="login-container">
+            <div class="cyber-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <div class="term-btn btn-red"></div>
+                        <div class="term-btn btn-yellow"></div>
+                        <div class="term-btn btn-green"></div>
+                    </div>
+                </div>
+
+                <div class="cyber-content">
+                    <div class="neon-header">
+                        <div class="cyber-logo">
+                            <div class="logo-frame">
+                                <div class="logo-core">
+                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                        <path d="M20 4L36 12v16L20 36L4 28V12L20 4z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                        <circle cx="20" cy="20" r="6" stroke="currentColor" stroke-width="1.5"/>
+                                        <path d="M14 14l12 12M26 14l-12 12" stroke="currentColor" stroke-width="1"/>
+                                    </svg>
+                                </div>
+                                <div class="logo-scanner"></div>
+                            </div>
+                            <div class="neon-glow"></div>
+                        </div>
+                        <h1 class="cyber-title">
+                            <span class="title-glitch" data-text="CYPHER_NET">19 15  13  2  18  1</span>
+                        </h1>
+                    </div>
+
+                    <form class="neon-form" id="enigma1" novalidate>
+                        <div class="cyber-field">
+                            <div class="field-frame">
+                                <div class="field-border"></div>
+                                <input type="text" id="codigo1" placeholder="CÓDIGO SECRETO">
+                                <div class="cyber-scanner"></div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="neon-button">
+                            <div class="btn-matrix"></div>
+                            <span class="btn-text">[ TENTE ]</span>
+                            <div class="btn-loader">
+                                <div class="matrix-loader">
+                                    <div class="matrix-bar"></div>
+                                    <div class="matrix-bar"></div>
+                                    <div class="matrix-bar"></div>
+                                    <div class="matrix-bar"></div>
+                                </div>
+                            </div>
+                            <div class="btn-glow"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="ref-container">
+            <div class="cyber-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <div class="term-btn btn-red"></div>
+                        <div class="term-btn btn-yellow"></div>
+                        <div class="term-btn btn-green"></div>
+                    </div>
+                </div>
+
+                <div class="cyber-content">
+                  
+
+                    <div class="ref-table-wrapper">
+                        <table class="cyber-table">
+                            <thead>
+                                <tr>
+                                    <th>LETRA</th>
+                                    <th>NÚMERO</th>
+                                    <th>LETRA</th>
+                                    <th>NÚMERO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>A</td><td>1</td><td>N</td><td>14</td></tr>
+                                <tr><td>B</td><td>2</td><td>O</td><td>15</td></tr>
+                                <tr><td>C</td><td>3</td><td>P</td><td>16</td></tr>
+                                <tr><td>D</td><td>4</td><td>Q</td><td>17</td></tr>
+                                 <tr><td>E</td><td>5</td><td>R</td><td>18</td></tr>
+                                <tr><td>F</td><td>6</td><td>S</td><td>19</td></tr>
+                                <tr><td>G</td><td>7</td><td>T</td><td>20</td></tr>
+                                <tr><td>H</td><td>8</td><td>U</td><td>21</td></tr>
+                                <tr><td>I</td><td>9</td><td>V</td><td>22</td></tr>
+                                <tr><td>J</td><td>10</td><td>W</td><td>23</td></tr>
+                                <tr><td>K</td><td>11</td><td>X</td><td>24</td></tr>
+                                <tr><td>L</td><td>12</td><td>Y</td><td>25</td></tr>
+                                <tr><td>M</td><td>13</td><td>Z</td><td>26</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <script src="js/main.js"></script>
+</body>
+</html>
