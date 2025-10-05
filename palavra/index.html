@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palavra</title>
+</head>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: #0a0a0a;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    line-height: 1.4;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 950px; 
+    min-height: calc(100vh - 40px); 
+    position: relative;
+    z-index: 1;
+    padding: 20px; 
+    text-align: center; 
+}
+
+.cyber-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.grid-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, #00ff41, transparent);
+    opacity: 0.1;
+    animation: gridPulse 4s ease-in-out infinite;
+}
+
+.grid-h-1 { top: 20%; width: 100%; height: 1px; animation-delay: 0s; }
+.grid-h-2 { top: 50%; width: 100%; height: 1px; animation-delay: 1.5s; }
+.grid-h-3 { top: 80%; width: 100%; height: 1px; animation-delay: 3s; }
+
+.grid-v-1 { top: 0; left: 25%; width: 1px; height: 100%; background: linear-gradient(0deg, transparent, #00ff41, transparent); animation-delay: 0.75s; }
+.grid-v-2 { top: 0; left: 75%; width: 1px; height: 100%; background: linear-gradient(0deg, transparent, #00ff41, transparent); animation-delay: 2.25s; }
+
+@keyframes gridPulse {
+    0%,100%{opacity:0.1}50%{opacity:0.3}
+}
+
+.cyber-glitch {
+    position: absolute;
+    width: 200px;
+    height: 2px;
+    background: #ff0080;
+    opacity: 0;
+    animation: glitchFlash 6s ease-in-out infinite;
+}
+.glitch-1 { top: 30%; left: 10%; animation-delay: 2s; }
+.glitch-2 { top: 70%; right: 10%; animation-delay: 4s; }
+
+@keyframes glitchFlash {
+    0%,95%,100%{opacity:0;transform:scaleX(0);}
+    96%,99%{opacity:0.8;transform:scaleX(1);}
+}
+
+
+.password-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    gap: 20px;
+    padding: 40px 0;
+}
+
+.password-area {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.pass-block {
+    width: 50px;
+    height: 60px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: inherit;
+    
+    background: #1a1a1a;
+    color: #00ff41;
+    border: 2px solid #00ff41;
+    box-shadow: 0 0 10px rgba(0,255,65,0.5);
+    caret-color: #ff0080;
+    transition: all 0.2s ease;
+}
+
+.pass-block:focus {
+    outline: none;
+    border-color: #ff0080;
+    box-shadow: 0 0 15px #ff0080;
+}
+
+.pass-block:disabled {
+    background: #0a0a0a;
+    opacity: 0.9;
+    cursor: default;
+    color: #00ff41;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.error-shake {
+    animation: shake 0.5s;
+    border-color: #ff0080 !important;
+    box-shadow: 0 0 15px #ff0080 !important;
+    color: #ff0080 !important;
+}
+
+.neon-button {
+    width: 100%;
+    max-width: 300px; 
+    background: transparent;
+    color: #00ff41;
+    border: 2px solid #00ff41;
+    border-radius: 4px;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+.btn-matrix { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background: rgba(0,0,0,0.9); 
+    transition: all 0.3s ease; 
+}
+.neon-button:hover { 
+    border-color: #ff0080; 
+    color: #ff0080; 
+    box-shadow: 0 0 15px rgba(255,0,128,0.5); 
+}
+.neon-button:hover .btn-matrix { 
+    background: rgba(255,0,128,0.1); 
+}
+.neon-button:active { 
+    transform: scale(0.98); 
+}
+.neon-button.loading {
+    cursor: wait;
+    border-color: #00ff41;
+    box-shadow: 0 0 20px #00ff41;
+}
+.btn-text { 
+    position: relative; 
+    z-index: 2; 
+    transition: opacity 0.3s ease; 
+}
+
+@media (max-width:600px){
+    .password-area {
+        gap: 5px;
+    }
+    .pass-block {
+        width: 40px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+}
+@media (max-width:480px){
+    body{padding:16px;}
+}
+    </style>
+<body onload="setupPassword()">
+    <div class="cyber-grid">
+        <div class="grid-line grid-h-1"></div>
+        <div class="grid-line grid-v-1"></div>
+        <div class="grid-line grid-h-2"></div>
+        <div class="grid-line grid-v-2"></div>
+        <div class="grid-line grid-h-3"></div>
+        <div class="cyber-glitch glitch-1"></div>
+        <div class="cyber-glitch glitch-2"></div>
+    </div>
+
+    <div class="page-container">
+        <form id="enigma2" class="password-form">
+            <div class="password-area">
+                <input type="text" id="input1" class="pass-block" maxlength="1" disabled>
+                <input type="text" id="input2" class="pass-block" maxlength="1" oninput="this.value = this.value.toUpperCase(); nextInput(this, 'input3')">
+                <input type="text" id="input3" class="pass-block" maxlength="1" disabled>
+                <input type="text" id="input4" class="pass-block" maxlength="1" oninput="this.value = this.value.toUpperCase(); nextInput(this, 'input5')">
+                <input type="text" id="input5" class="pass-block" maxlength="1" oninput="this.value = this.value.toUpperCase()">
+            </div>
+
+            <button type="submit" class="neon-button">
+                <div class="btn-matrix"></div>
+                <span class="btn-text">[ TENTE ]</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('enigma2');
+            const inputs = document.querySelectorAll('.pass-block');
+            const button = form.querySelector('.neon-button');
+            const btnText = button.querySelector('.btn-text');
+
+            const RESPOSTA_CORRETA = "JOKER";
+            const URL_DESTINO = "../final";
+
+            function setupPassword() {
+                document.getElementById('input1').value = 'J';
+                document.getElementById('input3').value = 'K';
+                document.getElementById('input2').focus();
+            }
+
+            setupPassword();
+
+
+            function nextInput(currentInput, nextInputId) {
+                if (currentInput.value.length === currentInput.maxLength) {
+                    const next = document.getElementById(nextInputId);
+                    if (next) {
+                        next.focus();
+                    }
+                }
+            }
+            
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                let fullPassword = '';
+                inputs.forEach(input => {
+                    fullPassword += input.value.toUpperCase();
+                });
+                
+                const input2 = document.getElementById('input2');
+                const input4 = document.getElementById('input4');
+                const input5 = document.getElementById('input5');
+
+                if (fullPassword === RESPOSTA_CORRETA) {
+                    btnText.textContent = "[ ACESSO CONCEDIDO ]";
+                    button.classList.add('loading');
+                    
+                    setTimeout(() => {
+                        window.location.href = URL_DESTINO;
+                    }, 1500);
+                    
+                } else {
+                    btnText.textContent = "[ ERRO DE AUTENTICAÇÃO ]";
+                    button.classList.add('error-shake');
+                    
+                    [input2, input4, input5].forEach(input => {
+                        input.classList.add('error-shake');
+                    });
+                    
+                    setTimeout(() => {
+                        button.classList.remove('error-shake');
+                        
+                        [input2, input4, input5].forEach(input => {
+                            input.classList.remove('error-shake');
+                            input.value = '';
+                        });
+
+                        btnText.textContent = "[ TENTE ]";
+                        input2.focus(); 
+                    }, 1000);
+                }
+            });
+        });
+        
+        
+        function nextInput(currentInput, nextInputId) {
+            if (currentInput.value.length === currentInput.maxLength) {
+                const next = document.getElementById(nextInputId);
+                if (next) {
+                    next.focus();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
