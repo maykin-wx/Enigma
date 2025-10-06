@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const RESPOSTA_NUMERO = "1915132181"; 
     
     // Define o URL de destino
-    const URL_DESTINO = "mantab";
+    const URL_DESTINO = "namtab";
 
     // 2. Adiciona o listener de evento para a submissão do formulário
     form.addEventListener('submit', function(event) {
